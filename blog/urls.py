@@ -25,5 +25,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('post/<int:post_id>', views.post_page, name='post_page'),
-    path('create_post', views.create_post, name='make_post')
+    path('create_post', views.create_post, name='make_post'),
+    path('accounts/registration', views.signup, name='registration')
 ]

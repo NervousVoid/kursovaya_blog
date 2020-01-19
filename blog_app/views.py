@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from django.shortcuts import render
-from .forms import PostForm
+from django.shortcuts import render, redirect
+from .forms import PostForm, RegisterForm
+from django.contrib.auth.models import User
 from .models import Post
 from django.utils import timezone
 
@@ -39,6 +40,36 @@ def post_page(request, post_id):
         return render(request, 'post.html', {'post': post})
     except Post.DoesNotExist:
         raise Http404
+
+
+def signup(request):
+    if request.user.is_authenticated:
+        return redirect('index')
+    else:
+        context = dict()
+        if request.method == 'POST':
+            f = RegisterForm(request.POST)
+            if f.is_valid():
+                if f.data['username'] not in User.objects.all().values_list('username', flat=True):
+                    username = f.data['username']
+                    name = f.data['name']
+                    surname = f.data['surname']
+                    password = f.data['password']
+
+                    usr = User(username=username, first_name=name, last_name=surname)
+                    usr.set_password(password)
+                    usr.save()
+
+                    context['form'] = f
+                    context['user_registered'] = True
+                else:
+                    context['form'] = f
+                    context['errors'] = 'This username is already taken'
+            else:
+                context['form'] = f
+        else:
+            context['form'] = RegisterForm()
+        return render(request, 'registration/registration.html', context)
 
 
 def index(request):

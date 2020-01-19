@@ -15,7 +15,8 @@
         <br>
         <h2>You need to be logged in to use the service fully</h2>
         <br>
-        <a class="btn btn-success" href="{% url 'login' %}"> Log in </a>
+        <a class="btn btn-success" href="{% url 'login' %}"> Sign in </a>
+        <a class="btn btn-success" href="{% url 'registration' %}"> Sign up </a>
     {% endif %}
     <div class="row">
         {% for each in posts %}
@@ -26,11 +27,6 @@
                         <h6 class="card-subtitle mb-2 text-muted">{{ each.date }}</h6>
                         <p class="card-text">{{ each.description }}</p>
                         <a href="/post/{{ each.id }}" class="card-link">Read Post</a>
-                        <br>
-                        <br>
-                        <form method="POST">
-                            <input type="button" class="btn btn-outline-success" value="Like ({{ each.likes }})">
-                        </form>
                     </div>
                 </div>
             </div>
