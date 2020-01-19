@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %} Main Page {% endblock %}
+
+{% block content %}
+    {% if request.user.is_authenticated %}
+        <h1> Hello, {{ request.user.username | title }}! </h1>
+        <br>
+        <a class="btn btn-primary" href="{% url 'logout' %}"> Log out </a>
+        <br>
+        <h2>Menu</h2>
+    {% else %}
+        <h1> Hello! </h1>
+        <br>
+        <h2>You need to be logged in to use the service fully</h2>
+        <br>
+        <a class="btn btn-success" href="{% url 'login' %}"> Log in </a>
+    {% endif %}
+    {% for each in posts %}
+
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{ each.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ each.date }}</h6>
+                <p class="card-text">{{ each.description }}</p>
+                <a href="/post/{{ each.id }}" class="card-link">Read Post</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
