@@ -8,3 +8,4 @@ class Post(models.Model):
     description = models.CharField(max_length=512)
     text = models.CharField(max_length=100000)
     date = models.DateTimeField(auto_now_add=True)
+    likes = models.IntegerField(default=0)
