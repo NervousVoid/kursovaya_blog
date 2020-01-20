@@ -1,9 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render, redirect
-from .forms import PostForm, RegisterForm
+from .forms import PostForm, RegisterForm, CommentForm
 from django.contrib.auth.models import User
-from .models import Post
+from .models import Post, Comment
 from django.utils import timezone
 
 
@@ -24,7 +24,7 @@ def create_post(request):
                         text=text, date=date)
             post.save()
 
-            context['form'] = f
+            context['form'] = PostForm()
             context['post_created'] = True
         else:
             context['form'] = f
@@ -36,8 +36,30 @@ def create_post(request):
 
 def post_page(request, post_id):
     try:
+
+        context = dict()
+        if request.method == 'POST':
+            f = CommentForm(request.POST)
+            if f.is_valid():
+
+                user = request.user
+                text = f.data['text']
+                comm = Comment(text=text, user=user, post_id=post_id)
+                comm.save()
+
+                context['form'] = CommentForm()
+            else:
+                context['form'] = CommentForm()
+        else:
+            context['form'] = CommentForm()
+
         post = Post.objects.get(pk=post_id)
-        return render(request, 'post.html', {'post': post})
+        context['post'] = post
+
+        comments = Comment.objects.filter(post_id=post_id).order_by('user__post__date')
+        context['comments'] = comments
+
+        return render(request, 'post.html', context)
     except Post.DoesNotExist:
         raise Http404
 
@@ -63,7 +85,7 @@ def signup(request):
                     context['form'] = f
                     context['user_registered'] = True
                 else:
-                    context['form'] = f
+                    context['form'] = RegisterForm()
                     context['errors'] = 'This username is already taken'
             else:
                 context['form'] = f

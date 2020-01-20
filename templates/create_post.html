@@ -1,23 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Creating Post</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %} Creating Post {% endblock %}
+
+{% block content %}
     <h1>Create Post</h1>
     <br>
     {% if post_created %}
+        <br>
         <h2>Post was created</h2>
+        <br>
     {% endif %}
     <br>
     <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Create">
+        <div class="form-group">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input class="btn btn-primary" type="submit" value="Create">
+        </div>
     </form>
     {% if errors %}
         {{ errors }}
     {% endif %}
-</body>
-</html>
+{% endblock %}

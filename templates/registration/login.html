@@ -5,9 +5,11 @@
 {% block content %}
     <h1>Logging in</h1>
     <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Sign in">
+        <div class="form-group">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input class="btn btn-primary" type="submit" value="Sign in">
+        </div>
     </form>
     {% if errors %}
         {{ errors }}
