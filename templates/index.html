@@ -25,7 +25,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ each.name }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{ each.date }}</h6>
-                        <h6 class="card-subtitle mb-2 text-muted">By {{ each.user.username }}</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">By {{ each.user.username }} (Rating: {{ each.user.user_rating }})</h6>
                         <p class="card-text">{{ each.description }}</p>
                         <a type="button" href="/post/{{ each.id }}" class="btn btn-outline-primary">Read Post</a>
                         <br>
