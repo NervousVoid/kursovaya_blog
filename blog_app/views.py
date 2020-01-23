@@ -36,7 +36,6 @@ def create_post(request):
 
 def post_page(request, post_id):
     try:
-
         context = dict()
         if request.method == 'POST':
             f = CommentForm(request.POST)
@@ -92,6 +91,23 @@ def signup(request):
         else:
             context['form'] = RegisterForm()
         return render(request, 'registration/registration.html', context)
+
+
+@login_required
+def liker(request, post_id):
+    try:
+        context = dict()
+        post = Post.objects.get(pk=post_id)
+        if request.user not in post.liked_users:
+            post.liked_users.append(request.user)
+            post.rating += 1
+        else:
+            post.liked_users.remove(request.user)
+            post.rating -= 1
+        post.save()
+        return redirect('index')
+    except Post.DoesNotExist:
+        raise Http404
 
 
 def index(request):

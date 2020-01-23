@@ -1,4 +1,5 @@
 from django import forms
+from tinymce.widgets import TinyMCE
 
 
 class PostForm(forms.Form):
@@ -7,7 +8,7 @@ class PostForm(forms.Form):
     description = forms.CharField(max_length=512, required=True,
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
     text = forms.CharField(max_length=100000, required=True, widget=forms.Textarea(attrs={'class': 'form-control',
-                                                                                           'rows': 10}))
+                                                                                          'rows': 10}))
 
 
 class RegisterForm(forms.Form):
@@ -24,3 +25,13 @@ class RegisterForm(forms.Form):
 class CommentForm(forms.Form):
     text = forms.CharField(label='Write a comment', max_length=100000, required=True,
                            widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}))
+
+
+'''
+<label class="btn btn-outline-success">
+                                <input type="radio" name="options" id="option1"> +
+                            </label>
+                            <label class="btn btn-outline-danger">
+                                <input type="radio" name="options" id="option2"> -
+                            </label>
+'''

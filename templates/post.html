@@ -3,13 +3,17 @@
 {% block title %} {{ post.name | title }} {% endblock %}
 
 {% block content %}
+    <h1>{{ post.name }}</h1>
     <br>
     <p>{{ post.date }}</p>
     <p>Written by {{ post.user.username }}</p>
     <br>
+    <h5>Rating: {{ post.rating }}</h5>
+    <br>
     <h2>{{ post.description }}</h2>
     <br>
     <p>{{ post.text }}</p>
+    <br>
     <div class="card">
         <h5 class="card-header">Comments</h5>
         <div class="card-body">

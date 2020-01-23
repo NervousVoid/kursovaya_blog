@@ -3,6 +3,15 @@
 {% block title %} Creating Post {% endblock %}
 
 {% block content %}
+
+    <script src="https://cdn.tiny.cloud/1/zlv6vp0brvwn9nn71wz2tf7v74oq3sgj1wex4k3v3pvz2pa0/tinymce/5/tinymce.min.js"
+            referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '#mytextarea'
+        });
+    </script>
+
     <h1>Create Post</h1>
     <br>
     {% if post_created %}
@@ -11,12 +20,14 @@
         <br>
     {% endif %}
     <br>
+
     <form method="POST">
         <div class="form-group">
             {% csrf_token %}
             {{ form.as_p }}
             <input class="btn btn-primary" type="submit" value="Create">
         </div>
+
     </form>
     {% if errors %}
         {{ errors }}
