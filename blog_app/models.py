@@ -4,7 +4,7 @@ from tinymce.models import HTMLField
 
 
 class Post(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='post')
     name = models.CharField(max_length=128)
     description = models.CharField(max_length=512)
     text = models.CharField(max_length=100000)
@@ -22,7 +22,7 @@ class Comment(models.Model):
 
 def user_rating(self):
     rating = 0
-    posts = self.posts.all()
+    posts = self.post.all()
     for each in posts:
         rating += each.rating
     return rating
