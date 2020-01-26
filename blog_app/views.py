@@ -43,19 +43,14 @@ def post_page(request, post_id):
 
                 user = request.user
                 text = f.data['text']
-                comm = Comment(text=text, user=user, post_id=post_id)
+                comm = Comment(text=text, user=user, post_id=post_id, date=timezone.now())
                 comm.save()
-
-                context['form'] = CommentForm()
-            else:
-                context['form'] = CommentForm()
-        else:
-            context['form'] = CommentForm()
-
+                f.full_clean()
+        context['form'] = CommentForm()
         post = Post.objects.get(pk=post_id)
         context['post'] = post
 
-        comments = Comment.objects.filter(post_id=post_id).order_by('user__post__date')
+        comments = Comment.objects.filter(post_id=post_id).order_by('-date')
         context['comments'] = comments
 
         return render(request, 'post.html', context)

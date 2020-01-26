@@ -9,15 +9,15 @@ class Post(models.Model):
     description = models.CharField(max_length=512)
     text = models.CharField(max_length=100000)
     date = models.DateTimeField(auto_now_add=True)
-
-    liked_users = [models.ForeignKey(User, on_delete=models.CASCADE)]
+    liked_users = [models.ForeignKey(User, on_delete=models.SET_NULL, null=True)]
     rating = models.IntegerField(default=0)
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     text = models.CharField(max_length=512)
     post_id = models.IntegerField()
+    date = models.DateTimeField(auto_now_add=True)
 
 
 def user_rating(self):
