@@ -9,6 +9,11 @@ from django.utils import timezone
 
 @login_required
 def create_post(request):
+    """
+    Страница создания поста
+    :param request:
+    :return:
+    """
     context = dict()
     if request.method == 'POST':
         f = PostForm(request.POST)
@@ -35,6 +40,12 @@ def create_post(request):
 
 
 def post_page(request, post_id):
+    """
+    Страница поста
+    :param request:
+    :param post_id:
+    :return:
+    """
     try:
         context = dict()
         if request.method == 'POST':
@@ -106,6 +117,11 @@ def liker(request, post_id):
 
 
 def index(request):
+    """
+    Главная страница блога
+    :param request:
+    :return:
+    """
     context = dict()
     posts = Post.objects.order_by('-date')
     context['posts'] = posts
