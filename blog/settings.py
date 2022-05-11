@@ -28,6 +28,9 @@ INSTALLED_APPS = [
     'blog_app.apps.BlogAppConfig',
 ]
 
+# Defining static files root
+STATIC_URL = 'static/'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
