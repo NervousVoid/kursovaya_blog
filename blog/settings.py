@@ -107,10 +107,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
-
 STATIC_URL = '/static/'
 
 LOGIN_URL = '/accounts/login'
@@ -118,3 +114,5 @@ LOGIN_URL = '/accounts/login'
 LOGIN_REDIRECT_URL = 'index'
 
 LOGOUT_REDIRECT_URL = 'index'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

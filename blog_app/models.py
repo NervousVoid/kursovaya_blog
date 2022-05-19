@@ -8,8 +8,10 @@ class Post(models.Model):
     description = models.CharField(max_length=512)
     text = models.CharField(max_length=100000)
     date = models.DateTimeField(auto_now_add=True)
-    liked_users = [models.ForeignKey(User, on_delete=models.SET_NULL, null=True)]
-    rating = models.IntegerField(default=0)
+    liked_users = models.ManyToManyField(User, related_name='liked_users')
+
+    def get_rating(self):
+        return self.liked_users.all().count()
 
 
 class Comment(models.Model):
@@ -23,7 +25,9 @@ def get_user_rating(self):
     rating = 0
     posts = self.post.all()
     for each in posts:
-        rating += each.rating
+        rating += each.get_rating()
     return rating
 
+
 User.add_to_class('user_rating', get_user_rating)
+

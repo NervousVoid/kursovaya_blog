@@ -1,10 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from .forms import PostForm, RegisterForm, CommentForm
 from django.contrib.auth.models import User
 from .models import Post, Comment
-from django.core import serializers
 from django.utils import timezone
 import json
 
@@ -90,23 +89,6 @@ def signup(request):
         return render(request, 'registration/registration.html', context)
 
 
-# @login_required
-# def liker(request, post_id):
-#     if request.method == "POST" and request.is_ajax():
-#         try:
-#             post = Post.objects.get(pk=post_id)
-#             if request.user not in post.liked_users:
-#                 post.liked_users.append(request.user)
-#                 post.rating += 1
-#             else:
-#                 post.liked_users.remove(request.user)
-#                 post.rating -= 1
-#             post.save()
-#             return redirect('index')
-#         except Post.DoesNotExist:
-#             raise Http404
-
-
 @login_required
 def like(request):
     if request.method == 'GET':
@@ -114,67 +96,17 @@ def like(request):
         try:
             action = ''
             post = Post.objects.get(pk=post_id)
-            if request.user not in post.liked_users:
-                post.liked_users.append(request.user)
-                post.rating += 1
+            if request.user not in post.liked_users.all():
+                post.liked_users.add(request.user)
                 action = 'add'
             else:
                 post.liked_users.remove(request.user)
-                post.rating -= 1
                 action = 'remove'
             post.save()
-            ctx = {"post_likes": post.rating, "action": action}
+            ctx = {"post_likes": post.get_rating(), "action": action}
             return HttpResponse(json.dumps(ctx), content_type='application/json')
         except Post.DoesNotExist:
             raise Http404
-
-    #     likedpost = Post.objects.get(id=post_id)
-    #     m = Like(post=likedpost)
-    #     m.save()
-    #     print(123)
-    #     return HttpResponse('success')
-    # else:
-    #     return HttpResponse("unsuccesful")
-
-
-# @login_required
-# def like_button(request):
-#     if request.method == "POST":
-#         if request.POST.get("operation") == "like_submit":
-#             content_id = request.POST.get("content_id", None)
-#         content = get_object_or_404(LikeButton, pk=content_id)
-#         if content.likes.filter(id=request.user.id):  # already liked the content
-#             content.likes.remove(request.user)  # remove user from likes
-#             liked = False
-#         else:
-#             content.likes.add(request.user)
-#             liked = True
-#         ctx = {"likes_count": content.total_likes, "liked": liked, "content_id": content_id}
-#         return HttpResponse(json.dumps(ctx), content_type='application/json')
-#
-#     contents = LikeButton.objects.all()
-#     already_liked = []
-#     id = request.user.id
-#     for content in contents:
-#         if content.likes.filter(id=id).exists():
-#             already_liked.append(content.id)
-#     ctx = {"contents": contents, "already_liked": already_liked}
-#     return render(request, "index.html", ctx)
-
-
-# def contact_form(request):
-#     form = ContactForm()
-#     if request.method == "POST" and request.is_ajax():
-#         form = ContactForm(request.POST)
-#         if form.is_valid():
-#             name = form.cleaned_data['name']
-#             form.save()
-#             return JsonResponse({"name": name}, status=200)
-#         else:
-#             errors = form.errors.as_json()
-#             return JsonResponse({"errors": errors}, status=400)
-#
-#     return render(request, "contact.html", {"form": form})
 
 
 def index(request):

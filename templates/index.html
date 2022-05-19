@@ -30,12 +30,11 @@
                         <a type="button" href="/post/{{ each.id }}" class="btn btn-outline-primary">Read Post</a>
                         <br>
                         <br>
-                        {% if request.user in each.liked_users %}
-                            <button id="{{ each.id }}" type="button" class="likebtn btn btn-success">❤️{{ each.rating }}</button>
+                        {% if request.user in each.liked_users.all  %}
+                            <button id="{{ each.id }}" type="button" class="likebtn btn btn-success">❤️{{ each.get_rating }}</button>
                         {% else %}
-                            <button id="{{ each.id }}" type="button" class="likebtn btn">❤️{{ each.rating }}</button>
+                            <button id="{{ each.id }}" type="button" class="likebtn btn">❤️{{ each.get_rating }}</button>
                         {% endif %}
-
                         </h6>
                     </div>
                 </div>

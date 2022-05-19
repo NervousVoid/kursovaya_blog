@@ -12,8 +12,5 @@ urlpatterns = [
     path('post/<int:post_id>', views.post_page, name='post_page'),
     path('create_post', views.create_post, name='make_post'),
     path('accounts/registration', views.signup, name='registration'),
-    # path('liked/<int:post_id>', views.liker, name='liker'),
     path('like/', views.like, name='like'),
-    # path('ajax/', include('post.urls')),
-    # re_path(r'^$', views.like_button, name='like'),
 ]
