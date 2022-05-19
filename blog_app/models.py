@@ -3,13 +3,6 @@ from django.contrib.auth.models import User
 
 
 class Post(models.Model):
-    """
-    Класс поста
-
-    :param user
-    :param name
-    :param rating
-    """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='post')
     name = models.CharField(max_length=128)
     description = models.CharField(max_length=512)
@@ -26,12 +19,11 @@ class Comment(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
 
-def user_rating(self):
+def get_user_rating(self):
     rating = 0
     posts = self.post.all()
     for each in posts:
         rating += each.rating
     return rating
 
-
-User.add_to_class('user_rating', user_rating)
+User.add_to_class('user_rating', get_user_rating)

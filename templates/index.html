@@ -30,13 +30,38 @@
                         <a type="button" href="/post/{{ each.id }}" class="btn btn-outline-primary">Read Post</a>
                         <br>
                         <br>
-                        <a type="button" href="/liked/{{ each.id }}" class="btn btn-outline-success">Like</a>
-                        <h6 class="card-subtitle mb-2 text-muted" style="display: inline-block; margin-left: 1rem;">
-                            Rating: {{ each.rating }}
+                        {% if request.user in each.liked_users %}
+                            <button id="{{ each.id }}" type="button" class="likebtn btn btn-success">❤️{{ each.rating }}</button>
+                        {% else %}
+                            <button id="{{ each.id }}" type="button" class="likebtn btn">❤️{{ each.rating }}</button>
+                        {% endif %}
+
                         </h6>
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
+    <script>
+        $('.likebtn').click(function(){
+        let id = $(this).attr('id');
+        $.ajax(
+            {
+                type:"GET",
+                url: '{% url "like" %}',
+                data:{
+                    post_id: id,
+                },
+            dataType: "json",
+            success: function(data)
+            {
+                $('#'+id).html('❤️'+data.post_likes);
+                if (data.action == "add")
+                    $( '#'+ id ).addClass('btn-success');
+                else if (data.action == "remove")
+                    $( '#'+ id ).removeClass('btn-success');
+            }
+        })
+    });
+</script>
 {% endblock %}
