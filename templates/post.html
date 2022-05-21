@@ -8,7 +8,7 @@
     <p>{{ post.date }}</p>
     <p>Written by {{ post.user.username }}</p>
     <br>
-    <h5>Rating: {{ post.rating }}</h5>
+    <h5>Rating: {{ post.get_rating }}</h5>
     <br>
     <h2>{{ post.description }}</h2>
     <br>
@@ -35,5 +35,32 @@
             {% endfor %}
         </div>
     </div>
+    <script>
+        $('.likebtn').click(function(){
+        let id = $(this).attr('id');
+        $.ajax(
+            {
+                type:"GET",
+                url: '{% url "like" %}',
+                data:{
+                    post_id: id,
+                },
+            dataType: "json",
+            success: function(data)
+            {
+                let btn = $('#'+id);
+                btn.html('❤️'+data.post_likes);
+                if (data.action == "add") {
+                    btn.removeClass('btn-light');
+                    btn.addClass('btn-success');
+                }
+                else if (data.action == "remove") {
+                    btn.removeClass('btn-success');
+                    btn.addClass('btn-light');
+                }
+            }
+        })
+    });
+</script>
 {% endblock %}
 

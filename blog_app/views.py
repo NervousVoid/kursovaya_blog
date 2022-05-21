@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from .forms import PostForm, RegisterForm, CommentForm
 from django.contrib.auth.models import User
@@ -36,27 +36,28 @@ def create_post(request):
 
 
 def post_page(request, post_id):
-    try:
-        context = dict()
-        if request.method == 'POST':
+    context = dict()
+    if request.method == 'POST':
+        try:
             f = CommentForm(request.POST)
             if f.is_valid():
-
                 user = request.user
                 text = f.data['text']
                 comm = Comment(text=text, user=user, post_id=post_id, date=timezone.now())
                 comm.save()
                 f.full_clean()
-        context['form'] = CommentForm()
-        post = Post.objects.get(pk=post_id)
-        context['post'] = post
+                return HttpResponseRedirect(str(post_id))
+        except Post.DoesNotExist:
+            raise Http404
 
-        comments = Comment.objects.filter(post_id=post_id).order_by('-date')
-        context['comments'] = comments
+    context['form'] = CommentForm()
+    post = Post.objects.get(pk=post_id)
+    context['post'] = post
 
-        return render(request, 'post.html', context)
-    except Post.DoesNotExist:
-        raise Http404
+    comments = Comment.objects.filter(post_id=post_id).order_by('-date')
+    context['comments'] = comments
+
+    return render(request, 'post.html', context)
 
 
 def signup(request):

@@ -24,13 +24,13 @@
                         <h6 class="card-subtitle mb-2 text-muted">{{ each.date }}</h6>
                         <h6 class="card-subtitle mb-2 text-muted">By {{ each.user.username }} (Rating: {{ each.user.user_rating }})</h6>
                         <p class="card-text">{{ each.description }}</p>
-                        <a type="button" href="/post/{{ each.id }}" class="btn btn-outline-primary">Read Post</a>
+                        <a href="/post/{{ each.id }}" class="btn btn-outline-primary" role="button">Read Post</a>
                         <br>
                         <br>
                         {% if request.user in each.liked_users.all  %}
                             <button id="{{ each.id }}" type="button" class="likebtn btn btn-success">❤️{{ each.get_rating }}</button>
                         {% else %}
-                            <button id="{{ each.id }}" type="button" class="likebtn btn">❤️{{ each.get_rating }}</button>
+                            <button id="{{ each.id }}" type="button" class="likebtn btn btn-light">❤️{{ each.get_rating }}</button>
                         {% endif %}
                         </h6>
                     </div>
@@ -51,11 +51,16 @@
             dataType: "json",
             success: function(data)
             {
-                $('#'+id).html('❤️'+data.post_likes);
-                if (data.action == "add")
-                    $( '#'+ id ).addClass('btn-success');
-                else if (data.action == "remove")
-                    $( '#'+ id ).removeClass('btn-success');
+                let btn = $('#'+id);
+                btn.html('❤️'+data.post_likes);
+                if (data.action == "add") {
+                    btn.removeClass('btn-light');
+                    btn.addClass('btn-success');
+                }
+                else if (data.action == "remove") {
+                    btn.removeClass('btn-success');
+                    btn.addClass('btn-light');
+                }
             }
         })
     });
