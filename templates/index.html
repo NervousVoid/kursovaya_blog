@@ -4,11 +4,7 @@
 
 {% block content %}
     {% if request.user.is_authenticated %}
-        <div class="card" style="width: 30rem; margin: 3rem;">
             <h1> Hello, {{ request.user.username | title }}! </h1>
-            <a class="btn btn-primary" style="width: 50%" href="{% url 'logout' %}"> Log out </a>
-            <h2>Menu</h2>
-        </div>
 
     {% else %}
         <h1> Hello! </h1>
@@ -18,10 +14,11 @@
         <a class="btn btn-success" href="{% url 'login' %}"> Sign in </a>
         <a class="btn btn-success" href="{% url 'registration' %}"> Sign up </a>
     {% endif %}
-    <div class="row">
+
+    <div class="row gy-5">
         {% for each in posts %}
-            <div class="col-">
-                <div class="card" style="width: 18rem; margin: 3rem; display: inline-block">
+            <div class="col-sm-4">
+                <div class="card" style="width: 18rem; margin: 0rem; display: inline-block">
                     <div class="card-body">
                         <h5 class="card-title">{{ each.name }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{ each.date }}</h6>
